@@ -13,9 +13,6 @@ function markletterAsRead(letterId) {
   saveletters(nextletters);
 }
 function openletterDialog(item, dialogElements) {
-
-  dialogElements.dialog.showModal();
-
   // 1. 日付・曜日・天気
   document.getElementById("pdf-date").textContent = item.memoDate;
   document.getElementById("pdf-weekday").textContent = item.memoWeekday;
@@ -63,6 +60,9 @@ function openletterDialog(item, dialogElements) {
 
   // 4. 明日やりたいこと
   document.getElementById("pdf-tomorrow-goal").textContent = item.memoTomorrowGoal;
+
+  showView("letter");
+  ensureDialogFab(dialogElements.dialog, item.id);
 }
 
 

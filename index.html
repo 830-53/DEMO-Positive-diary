@@ -291,7 +291,7 @@
         <div class="container single-column">
           <section class="panel notebook-panel">
             <div class="panel-head">
-              <h2>ダイアログ</h2>
+              <h2>カレンダー</h2>
               <button id="refresh-btn" class="btn-secondary" type="button">更新</button>
             </div>
 
@@ -317,7 +317,9 @@
 
         <div id="arrival-notice" class="arrival-notice" role="status" aria-live="polite" hidden></div>
 
-          <dialog id="letter-dialog">
+      </section>
+
+      <section id="letter-dialog" class="app-view letter-page" data-view="letter" hidden>
             <div class="pdf-dialog">
               <header class="pdf-header">
                 <p id="dialog-meta" class="dialog-meta visually-hidden"></p>
@@ -358,12 +360,10 @@
                 <p id="pdf-tomorrow-goal" class="pdf-answer"></p>
               </section>
 
-              <form method="dialog" class="pdf-close-form">
-                <button class="btn-secondary" type="submit">閉じる</button>
-              </form>
+              <div class="pdf-close-form">
+                <button class="btn-secondary nav-button" type="button" data-nav-target="inbox">カレンダーへ戻る</button>
+              </div>
             </div>
-          </dialog>
-
       </section>
     </main>
 

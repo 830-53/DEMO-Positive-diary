@@ -1,5 +1,5 @@
 const STORAGE_KEY = "future-letters.v1";
-const VIEW_NAMES = ["home", "write", "schedule", "send", "inbox", "reply", "settings", "delete-account", "terms", "privacy"];
+const VIEW_NAMES = ["home", "write", "schedule", "send", "inbox", "letter", "reply", "settings", "delete-account", "terms", "privacy"];
 const HISTORY_START_YEAR = 2026;
 const HISTORY_START_MONTH = 3;
 const DECISION_BUTTON_SOUND_SELECTOR = "button, a, select, .calendar-letter-card";
@@ -685,8 +685,7 @@ function openletterDialog(item, dialogElements) {
   dialogElements.body.textContent = item.body || "";
   // (Dialog-level reply button removed; dialog-scoped FAB is used instead.)
 
-  dialogElements.dialog.showModal();
-  // Add a small floating reply button inside the dialog so it is clickable while modal
+  showView("letter");
   ensureDialogFab(dialogElements.dialog, item.id);
 }
 
@@ -1205,6 +1204,20 @@ function ensureReplyOriginalTextDialog() {
     </div>
   `;
   document.body.appendChild(dialog);
+  const reposition = () => {
+    const viewport = window.visualViewport;
+    const width = viewport?.width || window.innerWidth;
+    const height = viewport?.height || window.innerHeight;
+    const offsetLeft = viewport?.offsetLeft || 0;
+    const offsetTop = viewport?.offsetTop || 0;
+
+    dialog.style.left = `${offsetLeft + width / 2}px`;
+    dialog.style.top = `${offsetTop + height / 2}px`;
+  };
+  window.addEventListener("resize", reposition);
+  window.visualViewport?.addEventListener("resize", reposition);
+  window.visualViewport?.addEventListener("scroll", reposition);
+  reposition();
   return dialog;
 }
 
@@ -1490,6 +1503,10 @@ function showView(viewName, options = {}) {
 
   appState.activeView = normalized;
 
+  if (normalized !== "letter" && typeof removeDialogFab === "function") {
+    removeDialogFab();
+  }
+
   document.querySelectorAll(".app-view").forEach((view) => {
     const isActive = view.dataset.view === normalized;
     view.hidden = !isActive;
@@ -1686,13 +1703,6 @@ function initApp() {
     }
   });
 
-  document.getElementById("letter-dialog")?.addEventListener("close", () => {
-    removeDialogFab();
-    if (appState.activeView === "inbox") {
-      renderInboxView();
-    }
-  });
-
   window.addEventListener("hashchange", () => {
     if (appState.suppressNextHashChange) {
       appState.suppressNextHashChange = false;
@@ -1706,7 +1716,7 @@ function initApp() {
     try {
       await initializeServerStorage();
       const initialView = getViewFromHash();
-      showView(initialView, { updateHash: false });
+      showView(initialView === "letter" ? "inbox" : initialView, { updateHash: initialView !== "letter" });
     } finally {
       document.documentElement.classList.add("app-ready");
     }

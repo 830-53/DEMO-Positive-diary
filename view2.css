@@ -484,11 +484,15 @@
 
 /* Reply log paper */
 #reply-dialog {
-  width: min(794px, calc(100vw - 24px), calc((100vh - 24px) * 210 / 297));
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
   max-width: none;
-  max-height: calc(100vh - 24px);
+  max-height: none;
+  margin: 0;
   padding: 0;
-  overflow: visible;
+  overflow: auto;
   background: transparent;
 }
 
@@ -800,8 +804,8 @@
 
 @media (max-width: 700px) {
   #reply-dialog {
-    width: min(calc(100vw - 16px), calc((100vh - 16px) * 210 / 297));
-    max-height: calc(100vh - 16px);
+    width: 100vw;
+    height: 100dvh;
   }
 
   .reply-dialog-paper {
