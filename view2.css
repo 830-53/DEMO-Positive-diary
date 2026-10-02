@@ -689,26 +689,31 @@
   text-decoration: underline;
 }
 
-#reply-original-text-dialog {
-  position: fixed;
-  inset: 0;
-  width: min(720px, calc(100vw - 24px));
-  max-width: calc(100vw - 24px);
-  max-height: calc(100vh - 24px);
-  margin: auto;
-  overflow: visible;
-}
-
 .reply-original-text-paper {
   display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 16px;
-  width: min(680px, calc(100vw - 32px));
-  max-height: min(70vh, 520px);
+  box-sizing: border-box;
+  width: 100%;
+  max-height: min(calc(100vh - 32px), 520px);
   padding: 24px;
-  overflow: auto;
+  overflow: hidden;
   background: #fffefa;
   color: #242424;
   font-family: "Klee One", "yomogi", sans-serif;
+}
+
+#reply-original-text-dialog {
+  position: fixed;
+  inset: 0;
+  width: min(680px, calc(100vw - 32px));
+  max-width: none;
+  max-height: min(calc(100vh - 32px), 520px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
 }
 
 .reply-original-text-paper h3,
@@ -723,6 +728,8 @@
 }
 
 .reply-original-text-paper p {
+  min-height: 0;
+  overflow-y: auto;
   min-height: 4em;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -812,6 +819,17 @@
 
 
 @media (max-width: 700px) {
+  #reply-original-text-dialog {
+    width: calc(100vw - 16px);
+    max-height: calc(100vh - 16px);
+  }
+
+  .reply-original-text-paper {
+    gap: 12px;
+    max-height: calc(100vh - 16px);
+    padding: 16px;
+  }
+
   .emotion-trend-head {
     flex-direction: column;
   }
