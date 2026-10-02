@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ポジティブ日記</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Yomogi&display=swap" rel="stylesheet" />
+    <style>
+      /*外部フォント設定*/
+      @font-face {
+        font-family: "ayase";
+        src: url("Aomemofont_2016_1130/AomemoFont-Regular.otf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+      }
+    </style>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="Title.css" />
+    <link rel="stylesheet" href="input.css" />
+    <link rel="stylesheet" href="view1.css" />
+    <link rel="stylesheet" href="view2.css" />
+    <link rel="stylesheet" href="husen.css" />
+  </head>
+  <body data-page="app">
+    <div class="bg-shape bg-shape-left"></div>
+    <div class="bg-shape bg-shape-right"></div>
+
+    <main class="app-root">
+      <section class="app-view is-active" data-view="home">
+        <header class="hero">
+          <div class="auth-controls" aria-label="アカウントメニュー"></div>
+          <p class="eyebrow">ポジティブ日記</p>
+          <h1>ホーム</h1>
+          <p class="lead"></p>
+        </header>
+
+        <div class="container single-column">
+          <section class="panel">
+            <div class="home-grid">
+              <a class="home-card" href="#write" data-nav-target="write">
+                <h2>今日の気持ちを書く</h2>
+                <p>今の気持ちを残して、未来の自分へ送ります。</p>
+                <span class="btn-primary btn-link">作成をはじめる</span>
+              </a>
+
+              <a class="home-card" href="#inbox" data-nav-target="inbox">
+                <h2>日記を見る</h2>
+                <!--<p>日記を見返せます。</p>-->
+                <span class="btn-secondary btn-link">閲覧ページへ</span>
+              </a>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="app-view" data-view="settings" hidden>
+        <header class="hero">
+          <p class="eyebrow">ポジティブ日記</p>
+          <h1>アカウント設定</h1>
+          <p class="lead">保存先のアカウントとプロフィールを管理します。</p>
+          <div class="settings-nav">
+            <button type="button" class="btn-secondary nav-button" data-nav-target="home">ホームへ戻る</button>
+            <button type="button" class="btn-danger nav-button" data-nav-target="delete-account">アカウント削除</button>
+          </div>
+        </header>
+
+        <div class="container single-column account-settings">
+          <section class="panel account-panel" data-account-state="logged-out">
+            <div class="panel-head">
+              <div>
+                <p class="section-kicker">はじめに</p>
+                <h2>アカウント作成＆ログイン</h2>
+              </div>
+              <span class="account-status">未ログイン</span>
+            </div>
+            <p class="settings-note">アカウントを作成すると、日記と下書きを自分専用の保存領域で管理できます。</p>
+
+            <div class="auth-forms">
+              <form id="login-form" class="form-grid compact-form">
+                <h2>ログイン</h2>
+                <label for="login-email">メールアドレス</label>
+                <input id="login-email" name="email" type="email" autocomplete="email" required>
+                <label for="login-password">パスワード</label>
+                <input id="login-password" name="password" type="password" autocomplete="current-password" required>
+                <button class="btn-primary" type="submit">ログイン</button>
+                <p id="login-message" class="form-message" role="status" aria-live="polite"></p>
+              </form>
+
+              <form id="register-form" class="form-grid compact-form">
+                <h2>新規登録</h2>
+                <label for="register-name">表示名</label>
+                <input id="register-name" name="name" type="text" maxlength="40" autocomplete="name" placeholder="例: さくら">
+                <label for="register-email">メールアドレス</label>
+                <input id="register-email" name="email" type="email" autocomplete="email" required>
+                <label for="register-password">パスワード</label>
+                <input id="register-password" name="password" type="password" minlength="6" autocomplete="new-password" required>
+                <label class="consent-checkbox" for="register-terms">
+                  <input id="register-terms" name="terms" type="checkbox" required>
+                  <span><a href="#terms" data-nav-target="terms">利用規約</a>に同意します</span>
+                </label>
+                <label class="consent-checkbox" for="register-privacy">
+                  <input id="register-privacy" name="privacy" type="checkbox" required>
+                  <span><a href="#privacy" data-nav-target="privacy">プライバシーポリシー</a>に同意します</span>
+                </label>
+                <button id="register-submit" class="btn-secondary" type="submit" disabled>アカウントを作成</button>
+                <p id="register-message" class="form-message" role="status" aria-live="polite"></p>
+              </form>
+            </div>
+          </section>
+
+          <section class="panel account-panel" data-account-state="logged-in" hidden>
+            <div class="panel-head">
+              <div>
+                <p class="section-kicker">現在のアカウント</p>
+                <h2 id="account-display-name">ユーザー</h2>
+              </div>
+              <span class="account-status is-active">ログイン中</span>
+            </div>
+            <dl class="account-summary">
+              <div><dt>メールアドレス</dt><dd id="account-email">-</dd></div>
+              <div><dt>ユーザーID</dt><dd id="account-uid">-</dd></div>
+            </dl>
+
+            <div class="settings-forms">
+              <form id="profile-form" class="form-grid compact-form">
+                <h3>表示名を変更</h3>
+                <label for="profile-name">表示名</label>
+                <input id="profile-name" name="name" type="text" maxlength="40" required>
+                <button class="btn-primary" type="submit">変更を保存</button>
+                <p id="profile-message" class="form-message" role="status" aria-live="polite"></p>
+              </form>
+
+              <form id="password-form" class="form-grid compact-form">
+                <h3>パスワードを変更</h3>
+                <label for="new-password">新しいパスワード</label>
+                <input id="new-password" name="password" type="password" minlength="6" autocomplete="new-password" required>
+                <button class="btn-secondary" type="submit">パスワードを更新</button>
+                <p id="password-message" class="form-message" role="status" aria-live="polite"></p>
+              </form>
+            </div>
+
+            <div class="form-actions split account-actions">
+              <button type="button" class="btn-secondary nav-button" data-nav-target="home">ホームへ戻る</button>
+              <button type="button" class="btn-danger" data-action="logout">ログアウト</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="app-view legal-page" data-view="terms" hidden>
+        <p class="eyebrow">自分応援団</p>
+        <h1>利用規約</h1>
+        <p class="legal-updated">制定日: 2026年10月2日</p>
+
+        <section class="legal-section">
+          <h2>1. サービスについて</h2>
+          <p>自分応援団は、日々の気持ちや出来事を記録し、未来の自分へ届けるためのサービスです。</p>
+        </section>
+        <section class="legal-section">
+          <h2>2. 利用登録</h2>
+          <p>利用者は、正確な情報を入力して登録するものとします。登録情報の管理と、利用者のアカウントを使った操作については、利用者が責任を負うものとします。</p>
+        </section>
+        <section class="legal-section">
+          <h2>3. 禁止事項</h2>
+          <p>利用者は、法令や公序良俗に反する行為、他者の権利を侵害する行為、サービスの運営を妨げる行為をしてはいけません。</p>
+        </section>
+        <section class="legal-section">
+          <h2>4. サービスの変更・停止</h2>
+          <p>運営者は、保守や障害対応などのため、事前の通知なくサービスの全部または一部を変更・停止することがあります。</p>
+        </section>
+        <section class="legal-section">
+          <h2>5. 規約の変更</h2>
+          <p>運営者は、必要に応じて本規約を変更できます。変更後の規約は、このページに掲載した時点から効力を持つものとします。</p>
+        </section>
+
+        <a class="btn-secondary legal-back" href="#settings" data-nav-target="settings">登録画面へ戻る</a>
+      </section>
+
+      <section class="app-view legal-page" data-view="privacy" hidden>
+        <p class="eyebrow">自分応援団</p>
+        <h1>プライバシーポリシー</h1>
+        <p class="legal-updated">制定日: 2026年10月2日</p>
+
+        <section class="legal-section">
+          <h2>1. 取得する情報</h2>
+          <p>本サービスでは、アカウント作成時に表示名、メールアドレス、パスワードを取得します。また、利用者が入力した日記や下書きなどのコンテンツを保存します。</p>
+        </section>
+        <section class="legal-section">
+          <h2>2. 利用目的</h2>
+          <p>取得した情報は、アカウント認証、日記や下書きの保存・表示、サービスの提供と改善のために利用します。</p>
+        </section>
+        <section class="legal-section">
+          <h2>3. 第三者サービス</h2>
+          <p>認証やデータ保存のために、Google Firebaseなどの第三者サービスを利用しています。各サービスの取り扱いについては、提供元のプライバシーポリシーもご確認ください。</p>
+        </section>
+        <section class="legal-section">
+          <h2>4. 情報の管理</h2>
+          <p>取得した情報へのアクセスを必要な範囲に制限し、適切な安全管理に努めます。ただし、インターネット上の通信や保存について、完全な安全性を保証するものではありません。</p>
+        </section>
+        <section class="legal-section">
+          <h2>5. 開示・削除</h2>
+          <p>利用者は、アカウント削除などの機能を通じて、自身の登録情報や保存データを削除できます。</p>
+        </section>
+        <section class="legal-section">
+          <h2>6. ポリシーの変更</h2>
+          <p>本ポリシーは、必要に応じて変更することがあります。変更後の内容は、このページに掲載した時点から適用します。</p>
+        </section>
+
+        <a class="btn-secondary legal-back" href="#settings" data-nav-target="settings">登録画面へ戻る</a>
+      </section>
+
+      <section class="app-view" data-view="delete-account" hidden>
+        <header class="hero">
+          <p class="eyebrow">ポジティブ日記</p>
+          <h1>アカウント削除</h1>
+          <p class="lead">アカウントと保存データを削除します。</p>
+          <div class="settings-nav">
+            <button type="button" class="btn-secondary nav-button" data-nav-target="settings">アカウント設定へ戻る</button>
+            <button type="button" class="btn-secondary nav-button" data-nav-target="home">ホームへ戻る</button>
+          </div>
+        </header>
+
+        <div class="container single-column account-settings">
+          <section class="panel danger-zone delete-account-panel" data-delete-state="logged-out">
+            <p class="section-kicker">ログインが必要です</p>
+            <h2>アカウントを削除するにはログインしてください</h2>
+            <p>アカウント削除は、ログイン中の本人だけが実行できます。</p>
+            <button type="button" class="btn-primary nav-button" data-nav-target="settings">アカウント設定へ戻る</button>
+          </section>
+
+          <section class="panel danger-zone delete-account-panel" data-delete-state="logged-in" hidden>
+            <p class="section-kicker">注意が必要な操作</p>
+            <h2>アカウントを完全に削除</h2>
+            <p>アカウント、日記、下書きが削除されます。この操作は取り消せません。</p>
+            <form id="delete-account-form" class="form-grid compact-form">
+              <label for="delete-confirmation">確認のため「削除」と入力してください</label>
+              <input id="delete-confirmation" name="confirmation" type="text" autocomplete="off" required>
+              <button class="btn-danger" type="submit">アカウントを完全に削除</button>
+              <p id="delete-account-message" class="form-message" role="status" aria-live="polite"></p>
+            </form>
+          </section>
+        </div>
+      </section>
+
+      <section class="app-view" data-view="write" hidden>
+        <header class="hero">
+          <p class="eyebrow">ポジティブ日記</p>
+          <h1>日記を書く</h1>
+          <p class="lead">今の気持ちを書き残します。</p>
+        </header>
+
+        <div class="container single-column">
+          <section class="panel">
+            <form id="draft-form" class="form-grid">
+              <label for="letter-title">件名</label>
+              <input id="letter-title" name="title" type="text" maxlength="80" placeholder="例: 未来の自分へ" />
+
+              <label for="letter-body">本文</label>
+              <textarea id="letter-body" name="body" rows="10" placeholder="今の明日やりたいこと、気持ちを書いてください" required></textarea>
+
+              <div class="form-actions split write-actions">
+                <button type="submit" class="btn-primary">保存する</button>
+                <button type="button" class="btn-secondary nav-button" data-nav-target="home">ホームへ戻る</button>
+              </div>
+            </form>
+            <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+          </section>
+
+          <section class="panel">
+            <div id="send-summary" class="summary-grid"></div>
+
+            <div class="form-actions split write-actions">
+              <button id="save-btn" type="button" class="btn-primary">保存</button>
+              <button type="button" class="btn-secondary nav-button" data-nav-target="home">ホームへ戻る</button>
+            </div>
+
+            <p id="send-message" class="form-message" role="status" aria-live="polite"></p>
+          </section>
+        </div>
+      </section>
+
+      <section class="app-view" data-view="inbox" hidden>
+        <header class="hero">
+          <p class="eyebrow">ポジティブ日記</p>
+          <h1>ログ</h1>
+          <p class="lead"></p>
+        </header>
+
+        <div class="container single-column">
+          <section class="panel notebook-panel">
+            <div class="panel-head">
+              <h2>ダイアログ</h2>
+              <button id="refresh-btn" class="btn-secondary" type="button">更新</button>
+            </div>
+
+            <div class="month-filter">
+              <label for="history-month">表示する月</label>
+              <select id="history-month" aria-label="表示する月"></select>
+            </div>
+
+            <div class="time-box">
+              <span>現在時刻</span>
+              <strong id="now-time">-</strong>
+            </div>
+
+            <div class="notebook-paper">
+              <div id="calendar-months" class="calendar-months"></div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-secondary nav-button" data-nav-target="home">ホームへ戻る</button>
+            </div>
+          </section>
+        </div>
+
+        <div id="arrival-notice" class="arrival-notice" role="status" aria-live="polite" hidden></div>
+
+          <dialog id="letter-dialog">
+            <div class="pdf-dialog">
+              <header class="pdf-header">
+                <p id="dialog-meta" class="dialog-meta visually-hidden"></p>
+                <h4 id="dialog-title" class="visually-hidden"></h4>
+                <p id="dialog-body" class="visually-hidden"></p>
+                <div class="pdf-date-line">
+                  <span id="pdf-date"></span>
+                  <span>（<span id="pdf-weekday"></span>）</span>
+                  <span class="pdf-weather-label">天気 <span id="pdf-weather-label"></span></span>
+                  <img id="pdf-weather-icon" class="pdf-icon" alt="">
+                </div>
+              </header>
+
+              <section class="pdf-block pdf-emotion-block">
+                <h3 class="pdf-title">今日の感情</h3>
+                <div class="pdf-row">
+                  <img id="pdf-emotion-icon" class="pdf-icon" alt="">
+                  <span id="pdf-emotion-label"></span>
+                </div>
+                <p id="pdf-strongest-emotion" class="pdf-prompt"></p>
+                <p id="pdf-emotion-reason" class="pdf-answer"></p>
+                <p class="pdf-prompt">どうしてこの感情が強かったか</p>
+                <p id="pdf-emotion-positive" class="pdf-answer"></p>
+              </section>
+
+              <section class="pdf-block pdf-event-block">
+                <h3 class="pdf-title">今日の出来事</h3>
+                <p id="pdf-event" class="pdf-answer"></p>
+              </section>
+
+              <section class="pdf-block">
+                <h3 class="pdf-title">今日できたこと</h3>
+                <p id="pdf-achievement-notes" class="pdf-answer"></p>
+              </section>
+
+              <section class="pdf-block pdf-tomorrow-block">
+                <h3 class="pdf-title">明日やりたいこと</h3>
+                <p id="pdf-tomorrow-goal" class="pdf-answer"></p>
+              </section>
+
+              <form method="dialog" class="pdf-close-form">
+                <button class="btn-secondary" type="submit">閉じる</button>
+              </form>
+            </div>
+          </dialog>
+
+      </section>
+    </main>
+
+    <script src="security.js"></script>
+    <script src="script.js"></script>
+    <script src="Title.js"></script>
+    <script src="input.js"></script>
+    <script src="view1.js"></script>
+    <script src="view2.js"></script>
+    <script src="husen.js"></script>
+    <script src="memo.js"></script>
+
+   <!--ファイアベースのコピペ＆データベース設定-->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+      import { getFirestore, collection, getDocs, getDoc, doc, setDoc, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBouzhg46FziI2qVJYRPEJ-sxO6oA8G1Z4",
+        authDomain: "positivedialy-663ec.firebaseapp.com",
+        projectId: "positivedialy-663ec",
+        storageBucket: "positivedialy-663ec.firebasestorage.app",
+        messagingSenderId: "246059433027",
+        appId: "1:246059433027:web:d2b80f98636f8a29f9a8f6",
+        measurementId: "G-JTHWM7PMLW"
+      };
+
+      try {
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.dbFunctions = { collection, getDocs, getDoc, doc, setDoc, deleteDoc, increment };
+        window.firebaseReady = true;
+        window.firebaseInitError = null;
+
+        console.log("Firebase & Firestore initialized successfully!");
+      } catch (error) {
+        console.error("Firebase initialization failed:", error);
+        window.firebaseReady = false;
+        window.firebaseInitError = error;
+      }
+    </script>
+
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="server.js"></script>
+  </body>
+  <footer>
+  <style>
+    .center-text {
+      text-align: center;
+      color: #743fa3;
+    }
+  </style>
+    <p class="center-text">@ 自分応援団</p>
+  </footer>
+</html>

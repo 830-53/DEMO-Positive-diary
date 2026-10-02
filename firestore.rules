@@ -1,0 +1,20 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Private user-owned data only. Publish this file in Firebase Console.
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth != null
+                        && request.auth.uid == userId;
+    }
+
+    // Legacy root collections are intentionally blocked.
+    match /letters/{document} {
+      allow read, write: if false;
+    }
+
+    match /drafts/{document} {
+      allow read, write: if false;
+    }
+  }
+}
