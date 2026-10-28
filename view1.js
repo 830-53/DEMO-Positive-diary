@@ -435,7 +435,7 @@ function createEmotionTrendChart(monthKey, monthlySummary = null) {
       <p class="emotion-profile-eyebrow">Emotion profile</p>
       <h3>感情パラメータ</h3>
     </div>
-    <p class="emotion-profile-note">${monthKey || "選択中の月"}の入力値を、最大値4に対する割合で表示</p>
+    <p class="emotion-profile-note">${monthKey || "選択中の月"}の入力値を、最大値9に対する割合で表示</p>
   `;
 
   const chartWrap = document.createElement("div");
@@ -451,7 +451,7 @@ function createEmotionTrendChart(monthKey, monthlySummary = null) {
     { key: "sad", label: "悲しい", color: "#4f8df7" },
     { key: "other", label: "その他", color: "#a6a6a6" },
   ];
-  const maxLevel = 4;
+  const maxLevel = 9;
   const monthlyTotals = monthlySummary?.emotionTotals || monthlySummary;
   const monthlyEntryCount = Number(monthlySummary?.entryCount);
   const profile = axes.reduce((values, axis) => {
@@ -470,7 +470,8 @@ function createEmotionTrendChart(monthKey, monthlySummary = null) {
     return [center + pointRadius * Math.sin(angle), center - pointRadius * Math.cos(angle)];
   };
   const buildPolygon = (pointRadius) => axes.map((_, index) => getPoint(pointRadius, index).map((value) => value.toFixed(1)).join(",")).join(" ");
-  const rings = [1, 2, 3, 4].map((level) => `<polygon class="emotion-profile-ring" points="${buildPolygon(radius * level / maxLevel)}" />`).join("");
+  const rings = Array.from({ length: maxLevel }, (_, index) => index + 1)
+    .map((level) => `<polygon class="emotion-profile-ring" points="${buildPolygon(radius * level / maxLevel)}" />`).join("");
   const spokes = axes.map((_, index) => {
     const [x, y] = getPoint(radius, index);
     return `<line class="emotion-profile-axis" x1="${center}" y1="${center}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" />`;

@@ -242,6 +242,7 @@ const EMOTION_PROFILE_KEYS = [
   "sad",
   "other",
 ];
+const EMOTION_PROFILE_MAX_LEVEL = 9;
 
 function createEmotionProfile() {
   return EMOTION_PROFILE_KEYS.reduce((profile, key) => {
@@ -259,7 +260,7 @@ function normalizeEmotionProfile(profile) {
 
   EMOTION_PROFILE_KEYS.forEach((key) => {
     const level = Number(profile[key]);
-    nextProfile[key] = Number.isFinite(level) ? Math.max(0, Math.min(4, Math.round(level))) : 0;
+    nextProfile[key] = Number.isFinite(level) ? Math.max(0, Math.min(EMOTION_PROFILE_MAX_LEVEL, Math.round(level))) : 0;
   });
 
   return nextProfile;
@@ -1245,7 +1246,7 @@ function renderReplyOriginal(container, letter) {
     const body = String(letter?.body || "");
     const labels = typeof EMOTION_AXES !== "undefined" ? EMOTION_AXES : [];
     labels.forEach(({ key, label }) => {
-      const matched = body.match(new RegExp(`・${label}[:：]\\s*(\\d+)\\s*/\\s*4`));
+      const matched = body.match(new RegExp(`・${label}[:：]\\s*(\\d+)\\s*/\\s*(?:4|9)`));
       if (matched) {
         profile[key] = Number(matched[1]);
       }
@@ -1255,10 +1256,10 @@ function renderReplyOriginal(container, letter) {
   const radius = 66;
   const pointFor = (value, index, scale = radius) => {
     const angle = -Math.PI / 2 + Math.PI * 2 * index / Math.max(axes.length, 1);
-    const length = scale * Math.max(0, Math.min(4, value)) / 4;
+    const length = scale * Math.max(0, Math.min(EMOTION_PROFILE_MAX_LEVEL, value)) / EMOTION_PROFILE_MAX_LEVEL;
     return `${(center + Math.cos(angle) * length).toFixed(1)},${(center + Math.sin(angle) * length).toFixed(1)}`;
   };
-  const rings = [1, 2, 3, 4].map((level) => {
+  const rings = Array.from({ length: EMOTION_PROFILE_MAX_LEVEL }, (_, index) => index + 1).map((level) => {
     const points = axes.map((_, index) => pointFor(level, index, radius)).join(" ");
     return `<polygon points="${points}" />`;
   }).join("");

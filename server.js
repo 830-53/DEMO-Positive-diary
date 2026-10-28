@@ -10,6 +10,7 @@ const EMOTION_AXES = [
     { key: "sad", label: "悲しい" },
     { key: "other", label: "その他" },
 ];
+const EMOTION_PROFILE_MAX_LEVEL = 9;
 
 function getFirebaseContext() {
     const db = window.db;
@@ -39,7 +40,7 @@ function normalizeEmotionProfile(profile) {
 
     EMOTION_AXES.forEach(({ key }) => {
         const level = Number(profile[key]);
-        nextProfile[key] = Number.isFinite(level) ? Math.max(0, Math.min(4, Math.round(level))) : 0;
+        nextProfile[key] = Number.isFinite(level) ? Math.max(0, Math.min(EMOTION_PROFILE_MAX_LEVEL, Math.round(level))) : 0;
     });
 
     return nextProfile;
@@ -55,7 +56,7 @@ function getEmotionSummaryLevel(profile) {
         return 20;
     }
 
-    return Math.min(100, 20 + strongest * 20);
+    return Math.min(100, Math.round(20 + (strongest / EMOTION_PROFILE_MAX_LEVEL) * 80));
 }
 
 function getWeatherLabel(weather) {
@@ -84,7 +85,7 @@ function buildLetterRecord(draft) {
         ...(hasEmotionProfile
             ? [
                     "感情の内訳:",
-                    ...EMOTION_AXES.map(({ key, label }) => `・${label}: ${memoEmotionProfile[key]}/4`),
+                    ...EMOTION_AXES.map(({ key, label }) => `・${label}: ${memoEmotionProfile[key]}/${EMOTION_PROFILE_MAX_LEVEL}`),
                 ]
             : []),
         "2. 今日の出来事",

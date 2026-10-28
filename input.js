@@ -55,7 +55,7 @@ const EMOTION_AXES = [
 const EMOTION_RADAR_SIZE = 320;
 const EMOTION_RADAR_CENTER = EMOTION_RADAR_SIZE / 2;
 const EMOTION_RADAR_RADIUS = 122;
-const EMOTION_RADAR_LEVELS = 4;
+const EMOTION_RADAR_LEVELS = 9;
 
 function createEmotionProfile() {
   return EMOTION_AXES.reduce((profile, { key }) => {
@@ -87,7 +87,7 @@ function getEmotionSummaryLevel(profile) {
     return 20;
   }
 
-  return Math.min(100, 20 + strongestLevel * 20);
+  return Math.min(100, Math.round(20 + (strongestLevel / EMOTION_RADAR_LEVELS) * 80));
 }
 
 function getEmotionAxisAngle(index) {
@@ -113,7 +113,7 @@ function getEmotionPolygonPoints(profile) {
 
 function getEmotionRadarMarkup(profile) {
   const normalizedProfile = normalizeEmotionProfile(profile);
-  const ringLevels = [1, 2, 3, 4];
+  const ringLevels = Array.from({ length: EMOTION_RADAR_LEVELS }, (_, index) => index + 1);
   const rings = ringLevels.map((level) => {
     const radius = (EMOTION_RADAR_RADIUS * level) / EMOTION_RADAR_LEVELS;
     const points = EMOTION_AXES.map((_, index) => {
@@ -156,7 +156,7 @@ function getEmotionRadarMarkup(profile) {
     return `
       <div class="emotion-radar-label" style="--emotion-angle: ${angle}deg; --emotion-color: ${axis.color};">
         <span class="emotion-radar-label-name">${axis.label}</span>
-        <span class="emotion-radar-label-value">${level}/4</span>
+        <span class="emotion-radar-label-value">${level}/${EMOTION_RADAR_LEVELS}</span>
       </div>
     `;
   }).join("");
@@ -176,7 +176,7 @@ function getEmotionRadarMarkup(profile) {
         ${labels}
       </div>
     </div>
-    <p class="emotion-radar-note">図を直接押して、中心から外へ4段階で選べます。</p>
+    <p class="emotion-radar-note">図を直接押して、中心から外へ${EMOTION_RADAR_LEVELS}段階で選べます。</p>
   `;
 }
 
@@ -231,7 +231,7 @@ async function saveDraftTolettersJson(draft) {
   const emotionDetailLines = hasEmotionProfile
     ? [
         `感情の内訳:`,
-        ...EMOTION_AXES.map(({ key, label }) => `・${label}: ${memoEmotionProfile[key]}/4`),
+        ...EMOTION_AXES.map(({ key, label }) => `・${label}: ${memoEmotionProfile[key]}/${EMOTION_RADAR_LEVELS}`),
       ]
     : [];
 
@@ -638,7 +638,7 @@ function buildMemoDraftFromForm() {
     ...(memoWeather ? [`天気: ${getWeatherLabel(memoWeather)}`] : []),
     `感情パラメータ: ${memoEmotionLevel}`,
     `感情の内訳:`,
-    ...EMOTION_AXES.map(({ key, label }) => `・${label}: ${memoEmotionProfile[key]}/4`),
+    ...EMOTION_AXES.map(({ key, label }) => `・${label}: ${memoEmotionProfile[key]}/${EMOTION_RADAR_LEVELS}`),
     `2. 今日の出来事`,
     `出来事: ${memoTodayEvent}`,
     `なぜその感情が強かったのか: ${memoEmotionReason}`,
