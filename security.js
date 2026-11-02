@@ -57,10 +57,7 @@
       errors.push(`ポジティブ変換は${LIMITS.memo}文字以内で入力してください。`);
     }
     if (String(value.memoTomorrowGoal || "").length > LIMITS.memo) {
-      errors.push(`明日やりたいことは${LIMITS.memo}文字以内で入力してください。`);
-    }
-    if (String(value.memoTomorrowFun || "").length > LIMITS.memo) {
-      errors.push(`明日楽しみなことは${LIMITS.memo}文字以内で入力してください。`);
+      errors.push(`明日やりたいこと・楽しみなことは${LIMITS.memo}文字以内で入力してください。`);
     }
 
     return { valid: errors.length === 0, errors };

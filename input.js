@@ -176,7 +176,7 @@ function getEmotionRadarMarkup(profile) {
         ${labels}
       </div>
     </div>
-    <p class="emotion-radar-note">図を直接押して、中心から外へ${EMOTION_RADAR_LEVELS}段階で選べます。</p>
+    <p class="emotion-radar-note">今日の感情を${EMOTION_RADAR_LEVELS}段階で選んでください。</p>
   `;
 }
 
@@ -247,10 +247,8 @@ async function saveDraftTolettersJson(draft) {
     `出来事: ${draft.memoTodayEvent}`,
     `3. 今日できたこと`,
     `自由記述: ${draft.memoAchievementNotes}`,
-    `4. 明日やりたいこと`,
+    `4. 明日やりたいこと・楽しみなこと`,
     draft.memoTomorrowGoal,
-    `5. 明日楽しみなこと`,
-    draft.memoTomorrowFun,
   ].join("\n");
 
   // Firebaseに保存するデータの形（バラバラの項目も一緒に持たせる！）
@@ -272,7 +270,6 @@ async function saveDraftTolettersJson(draft) {
     memoEmotionPositive: draft.memoEmotionPositive,
     memoAchievementNotes: draft.memoAchievementNotes,
     memoTomorrowGoal: draft.memoTomorrowGoal,
-    memoTomorrowFun: draft.memoTomorrowFun,
     
     createdAt: new Date().toISOString(),
     deliveryAt: "",
@@ -378,7 +375,6 @@ function renderWriteView() {
         <span class="memo-step-number">2</span>
         <div>
           <p class="memo-step-title">今日の出来事</p>
-          <p class="memo-step-note">上に出来事、下に感情を入れてください。</p>
         </div>
       </div>
       <div class="memo-grid">
@@ -392,7 +388,7 @@ function renderWriteView() {
         </label>
         <label class="memo-field">
           <span>ポジティブ変換</span>
-          <textarea id="memo-emotion-positive" name="memoEmotionPositive" rows="4" placeholder="ネガティブなら、前向きに言い換えてみよう">${draft.memoEmotionPositive || ""}</textarea>
+          <textarea id="memo-emotion-positive" name="memoEmotionPositive" rows="4" placeholder="ネガティブな感情なら、前向きに言い換えてみよう">${draft.memoEmotionPositive || ""}</textarea>
         </label>
       </div>
     </section>
@@ -402,13 +398,12 @@ function renderWriteView() {
         <span class="memo-step-number">3</span>
         <div>
           <p class="memo-step-title">今日できたこと</p>
-          <p class="memo-step-note">今日できたことを自由に書き留めます。</p>
         </div>
       </div>
       <label class="memo-field">
       </label>
       <label class="memo-field">
-        <span>自由記述</span>
+        <span> </span>
         <textarea id="memo-achievement-notes" name="memoAchievementNotes" rows="4" placeholder="どんなことでも、できたと思ったことを書こう">${draft.memoAchievementNotes || ""}</textarea>
       </label>
     </section>
@@ -417,27 +412,11 @@ function renderWriteView() {
       <div class="memo-section-head">
         <span class="memo-step-number">4</span>
         <div>
-          <p class="memo-step-title">明日やりたいこと</p>
-          <p class="memo-step-note">一行で、短く書いてください。</p>
+          <p class="memo-step-title">明日やりたいこと・楽しみなこと</p>
         </div>
       </div>
       <label class="memo-field">
-        <span>明日やりたいこと</span>
-        <textarea id="memo-tomorrow-goal" name="memoTomorrowGoal" rows="2" placeholder="明日やりたいことを一行で">${draft.memoTomorrowGoal || ""}</textarea>
-      </label>
-    </section>
-
-    <section class="memo-section memo-section-5">
-      <div class="memo-section-head">
-        <span class="memo-step-number">5</span>
-        <div>
-          <p class="memo-step-title">明日楽しみなこと</p>
-          <p class="memo-step-note">明日楽しみにしていることを書いてください。</p>
-        </div>
-      </div>
-      <label class="memo-field">
-        <span>明日楽しみなこと</span>
-        <textarea id="memo-tomorrow-fun" name="memoTomorrowFun" rows="2" placeholder="明日楽しみなことを書いてください">${draft.memoTomorrowFun || ""}</textarea>
+        <textarea id="memo-tomorrow-goal" name="memoTomorrowGoal" rows="4" placeholder="明日やりたいこと・楽しみなことを簡単に">${draft.memoTomorrowGoal || ""}</textarea>
       </label>
     </section>
 
@@ -629,7 +608,6 @@ function buildMemoDraftFromForm() {
   const memoEmotionPositive = String(document.getElementById("memo-emotion-positive")?.value || "").trim();
   const memoAchievementNotes = String(document.getElementById("memo-achievement-notes")?.value || "").trim();
   const memoTomorrowGoal = String(document.getElementById("memo-tomorrow-goal")?.value || "").trim();
-  const memoTomorrowFun = String(document.getElementById("memo-tomorrow-fun")?.value || "").trim();
 
   const body = [
     `1. 日付・曜日・天気`,
@@ -645,10 +623,8 @@ function buildMemoDraftFromForm() {
     `ポジティブ変換: ${memoEmotionPositive}`,
     `3. 今日できたこと`,
     `自由記述: ${memoAchievementNotes}`,
-    `4. 明日やりたいこと`,
+    `4. 明日やりたいこと・楽しみなこと`,
     memoTomorrowGoal,
-    `5. 明日楽しみなこと`,
-    memoTomorrowFun,
   ].join("\n");
 
   if (titleInput instanceof HTMLInputElement) {
@@ -673,7 +649,6 @@ function buildMemoDraftFromForm() {
     memoEmotionPositive,
     memoAchievementNotes,
     memoTomorrowGoal,
-    memoTomorrowFun,
   };
 }
 

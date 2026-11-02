@@ -292,7 +292,6 @@ function normalizeDraft(draft) {
       memoEmotionPositive: "",
       memoAchievementNotes: "",
       memoTomorrowGoal: "",
-      memoTomorrowFun: "",
       memoEmotionProfileTouched: false,
       deliveryMode: "fixed",
       deliveryRandomRange: "fiscalYear",
@@ -324,7 +323,6 @@ function normalizeDraft(draft) {
     memoEmotionPositive: typeof draft.memoEmotionPositive === "string" ? draft.memoEmotionPositive : "",
     memoAchievementNotes: typeof draft.memoAchievementNotes === "string" ? draft.memoAchievementNotes : "",
     memoTomorrowGoal: typeof draft.memoTomorrowGoal === "string" ? draft.memoTomorrowGoal : "",
-    memoTomorrowFun: typeof draft.memoTomorrowFun === "string" ? draft.memoTomorrowFun : "",
     deliveryMode: draft.deliveryMode === "random" ? "random" : "fixed",
     deliveryRandomRange: draft.deliveryRandomRange === "tenYears" ? "tenYears" : "fiscalYear",
     deliverySeason: ["spring", "summer", "autumn", "winter"].includes(draft.deliverySeason)
@@ -611,12 +609,8 @@ function renderDraftSummary(container, draft) {
         <p class="summary-value summary-body">${escapeHtml(draft.memoAchievementNotes || "")}</p>
       </div>
       <div class="summary-card">
-        <p class="summary-label">4. 明日やりたいこと</p>
+        <p class="summary-label">4. 明日やりたいこと・楽しみなこと</p>
         <p class="summary-value summary-body">${escapeHtml(draft.memoTomorrowGoal || "")}</p>
-      </div>
-      <div class="summary-card">
-        <p class="summary-label">5. 明日楽しみなこと</p>
-        <p class="summary-value summary-body">${escapeHtml(draft.memoTomorrowFun || "")}</p>
       </div>
     `;
     return;
@@ -1288,7 +1282,6 @@ function renderReplyOriginal(container, letter) {
     achievementNotes: letter?.memoAchievementNotes || "未入力",
     todayEvent: letter?.memoTodayEvent || "未入力",
     tomorrowGoal: letter?.memoTomorrowGoal || "未入力",
-    tomorrowFun: letter?.memoTomorrowFun || "未入力",
   };
   const emotionAxes = typeof EMOTION_AXES !== "undefined" ? EMOTION_AXES : [];
   const strongestEmotion = emotionAxes.reduce((strongest, axis) => {
@@ -1307,7 +1300,6 @@ function renderReplyOriginal(container, letter) {
     <div class="reply-log-paired"><div class="reply-log-box"><h4>ネガティブだったら…</h4><button class="reply-original-preview" type="button" data-original-key="emotionPositive">${escapeHtml(getReplyOriginalPreview(originalTexts.emotionPositive))}</button></div><div class="reply-log-box"><h4>良かったこと</h4><button class="reply-original-preview" type="button" data-original-key="achievementNotes">${escapeHtml(getReplyOriginalPreview(originalTexts.achievementNotes))}</button></div></div>
     <div class="reply-log-box reply-log-wide"><h4>今日の目標に対して</h4><button class="reply-original-preview" type="button" data-original-key="todayEvent">${escapeHtml(getReplyOriginalPreview(originalTexts.todayEvent))}</button></div>
     <div class="reply-log-box reply-log-wide"><h4>明日の目標</h4><button class="reply-original-preview" type="button" data-original-key="tomorrowGoal">${escapeHtml(getReplyOriginalPreview(originalTexts.tomorrowGoal))}</button></div>
-    <div class="reply-log-box reply-log-wide"><h4>明日楽しみなこと</h4><button class="reply-original-preview" type="button" data-original-key="tomorrowFun">${escapeHtml(getReplyOriginalPreview(originalTexts.tomorrowFun))}</button></div>
   `;
 
   container.querySelectorAll(".reply-original-preview").forEach((button) => {

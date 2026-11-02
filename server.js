@@ -94,10 +94,8 @@ function buildLetterRecord(draft) {
         `ポジティブ変換: ${draft?.memoEmotionPositive || ""}`,
         "3. 今日できたこと",
         `自由記述: ${draft?.memoAchievementNotes || ""}`,
-        "4. 明日やりたいこと",
+        "4. 明日やりたいこと・楽しみなこと",
         draft?.memoTomorrowGoal || "",
-        "5. 明日楽しみなこと",
-        draft?.memoTomorrowFun || "",
     ].join("\n");
 
     return {
@@ -115,7 +113,6 @@ function buildLetterRecord(draft) {
         memoEmotionPositive: String(draft?.memoEmotionPositive || ""),
         memoAchievementNotes: String(draft?.memoAchievementNotes || ""),
         memoTomorrowGoal: String(draft?.memoTomorrowGoal || ""),
-        memoTomorrowFun: String(draft?.memoTomorrowFun || ""),
         createdAt: new Date().toISOString(),
         deliveryAt: String(draft?.deliveryAt || ""),
         readAt: null,
@@ -295,7 +292,6 @@ function normalizeDraftForPersistence(draft) {
     applyStringDefault("memoTodayEvent", "未入力");
     applyStringDefault("memoAchievementNotes", "未入力");
     applyStringDefault("memoTomorrowGoal", "未入力");
-    applyStringDefault("memoTomorrowFun", "未入力");
     applyStringDefault("deliveryAt", "未入力");
 
     applyNumberDefault("memoEmotionLevel", 0);
