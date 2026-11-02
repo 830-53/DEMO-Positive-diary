@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ポジティブ日記</title>
+    <title>テンションあげあげ日記</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Yomogi&display=swap" rel="stylesheet" />
@@ -31,7 +31,7 @@
       <section class="app-view is-active" data-view="home">
         <header class="hero">
           <div class="auth-controls" aria-label="アカウントメニュー"></div>
-          <p class="eyebrow">ポジティブ日記</p>
+          <p class="eyebrow">テンションあげあげ日記</p>
           <h1>ホーム</h1>
           <p class="lead"></p>
         </header>
@@ -57,7 +57,7 @@
 
       <section class="app-view" data-view="settings" hidden>
         <header class="hero">
-          <p class="eyebrow">ポジティブ日記</p>
+          <p class="eyebrow">テンションあげあげ日記</p>
           <h1>アカウント設定</h1>
           <p class="lead">保存先のアカウントとプロフィールを管理します。</p>
           <div class="settings-nav">
@@ -156,7 +156,7 @@
 
         <section class="legal-section">
           <h2>1. サービスについて</h2>
-          <p>自分応援団は、日々の気持ちや出来事を記録する日記サイトです。このサイトのすべてのサービスは、無料で使用することができます。</p>
+          <p>自分応援団は、日々の気持ちや出来事を記録し、未来の自分へ届けるためのサービスです。</p>
         </section>
         <section class="legal-section">
           <h2>2. 利用登録</h2>
@@ -164,7 +164,7 @@
         </section>
         <section class="legal-section">
           <h2>3. 禁止事項</h2>
-          <p>利用者は、法令や公序良俗に反する行為、他者の権利を侵害する行為、サービスの運営を妨げる行為をしてはいけません。また、セキュリティの観点から、当サイトのURLを第三者に漏洩することを禁止します。</p>
+          <p>利用者は、法令や公序良俗に反する行為、他者の権利を侵害する行為、サービスの運営を妨げる行為をしてはいけません。</p>
         </section>
         <section class="legal-section">
           <h2>4. サービスの変更・停止</h2>
@@ -201,7 +201,7 @@
         </section>
         <section class="legal-section">
           <h2>5. 開示・削除</h2>
-          <p>利用者は、アカウント削除などの機能を通じて、自身の登録情報や保存データを削除できます。また、削除されたデータを復元することはできません。</p>
+          <p>利用者は、アカウント削除などの機能を通じて、自身の登録情報や保存データを削除できます。</p>
         </section>
         <section class="legal-section">
           <h2>6. ポリシーの変更</h2>
@@ -213,7 +213,7 @@
 
       <section class="app-view" data-view="delete-account" hidden>
         <header class="hero">
-          <p class="eyebrow">ポジティブ日記</p>
+          <p class="eyebrow">テンションあげあげ日記</p>
           <h1>アカウント削除</h1>
           <p class="lead">アカウントと保存データを削除します。</p>
           <div class="settings-nav">
@@ -246,7 +246,7 @@
 
       <section class="app-view" data-view="write" hidden>
         <header class="hero">
-          <p class="eyebrow">ポジティブ日記</p>
+          <p class="eyebrow">テンションあげあげ日記</p>
           <h1>日記を書く</h1>
           <p class="lead">今の気持ちを書き残します。</p>
         </header>
@@ -283,7 +283,7 @@
 
       <section class="app-view" data-view="inbox" hidden>
         <header class="hero">
-          <p class="eyebrow">ポジティブ日記</p>
+          <p class="eyebrow">テンションあげあげ日記</p>
           <h1>ログ</h1>
           <p class="lead"></p>
         </header>
@@ -296,12 +296,12 @@
             </div>
 
             <div class="month-filter">
-              <label for="history-month">表示する月</label>
+              <label for="history-month">月</label>
               <select id="history-month" aria-label="表示する月"></select>
             </div>
 
             <div class="time-box">
-              <span>現在時刻</span>
+              <span>時刻</span>
               <strong id="now-time">-</strong>
             </div>
 
@@ -334,7 +334,7 @@
               </header>
 
               <section class="pdf-block pdf-emotion-block">
-                <h3 class="pdf-title">今日の感情</h3>
+                <h3 class="pdf-title">今日の気持ち</h3>
                 <div class="pdf-row">
                   <img id="pdf-emotion-icon" class="pdf-icon" alt="">
                   <span id="pdf-emotion-label"></span>
@@ -366,6 +366,18 @@
             </div>
       </section>
     </main>
+
+    <dialog id="logout-confirmation-dialog" aria-labelledby="logout-confirmation-title">
+      <form id="logout-confirmation-form" class="logout-confirmation-form" method="dialog">
+        <h2 id="logout-confirmation-title">ログアウトしますか？</h2>
+        <p>ログアウトすると、次回利用時に再度ログインが必要です。</p>
+        <p id="logout-confirmation-message" class="form-message" role="status" aria-live="polite"></p>
+        <div class="logout-confirmation-actions">
+          <button type="submit" class="btn-secondary" value="cancel">キャンセル</button>
+          <button type="submit" class="btn-danger" value="confirm">ログアウト</button>
+        </div>
+      </form>
+    </dialog>
 
     <script src="security.js"></script>
     <script src="script.js"></script>
