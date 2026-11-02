@@ -33,6 +33,7 @@
 
 .eyebrow {
   margin: 0;
+  margin-inline: 16.666vw;
   color: var(--accent-dark);
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -41,6 +42,7 @@
 h1 {
   font-size: clamp(2rem, 4.8vw, 3rem);
   margin: 8px 0 10px;
+  margin-inline: 16.666vw;
 }
 
 .lead {

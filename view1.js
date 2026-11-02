@@ -58,7 +58,7 @@ function openletterDialog(item, dialogElements) {
   // 3. 今日できたこと
   document.getElementById("pdf-achievement-notes").textContent = item.memoAchievementNotes;
 
-  // 4. 明日やりたいこと
+  // 4. 明日やりたいこと・楽しみなこと
   document.getElementById("pdf-tomorrow-goal").textContent = item.memoTomorrowGoal;
 
   showView("letter");
