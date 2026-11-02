@@ -323,8 +323,9 @@ document.addEventListener("submit", async (ev) => {
     ev.preventDefault();
     const confirmation = document.getElementById("delete-confirmation")?.value.trim();
     const message = getFormMessage("delete-account-message");
-    if (confirmation !== "削除") {
-      if (message) message.textContent = "確認欄に「削除」と入力してください。";
+    const expectedDisplayName = auth.currentUser?.displayName || auth.currentUser?.email || "";
+    if (confirmation !== expectedDisplayName.trim()) {
+      if (message) message.textContent = "確認欄にアカウントの表示名を入力してください。";
       return;
     }
 
