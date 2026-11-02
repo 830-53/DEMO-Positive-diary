@@ -164,7 +164,53 @@ document.addEventListener("click", (ev) => {
   if (!(target instanceof Element)) return;
   if (target.matches("[data-action=logout]")) {
     ev.preventDefault();
-    logoutAccount().catch(() => {});
+    const dialog = document.getElementById("logout-confirmation-dialog");
+    if (!(dialog instanceof HTMLDialogElement)) {
+      console.error("ログアウト確認ダイアログが見つかりません。");
+      return;
+    }
+    dialog.showModal();
+  }
+});
+
+const logoutConfirmationForm = document.getElementById("logout-confirmation-form");
+const logoutConfirmationDialog = document.getElementById("logout-confirmation-dialog");
+const logoutConfirmationMessage = document.getElementById("logout-confirmation-message");
+
+logoutConfirmationForm?.addEventListener("submit", async (ev) => {
+  const submitter = ev.submitter;
+  if (!(submitter instanceof HTMLButtonElement) || submitter.value !== "confirm") {
+    return;
+  }
+
+  ev.preventDefault();
+  const buttons = logoutConfirmationForm.querySelectorAll("button");
+  buttons.forEach((button) => {
+    button.disabled = true;
+  });
+  if (logoutConfirmationMessage) {
+    logoutConfirmationMessage.textContent = "ログアウトしています...";
+  }
+
+  try {
+    await logoutAccount();
+    logoutConfirmationDialog?.close();
+  } catch (error) {
+    buttons.forEach((button) => {
+      button.disabled = false;
+    });
+    if (logoutConfirmationMessage) {
+      logoutConfirmationMessage.textContent = error.message || String(error);
+    }
+  }
+});
+
+logoutConfirmationDialog?.addEventListener("close", () => {
+  logoutConfirmationForm?.querySelectorAll("button").forEach((button) => {
+    button.disabled = false;
+  });
+  if (logoutConfirmationMessage) {
+    logoutConfirmationMessage.textContent = "";
   }
 });
 
